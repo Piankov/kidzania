@@ -2,9 +2,6 @@
 var assert = require('assert') 
 
 module.exports = {
-	printStep: function (step) {
-		console.log("Step:\t" + step);
-	},
 	assertUrlTitle: function (actual, url, title){
 		console.log('\tExpected URL:\t"' + url + '"');
 		console.log('\tActual URL:\t"' + actual.url + '"');	
@@ -20,5 +17,10 @@ module.exports = {
 	worldTitleR: "Кидзания в мире",
 	
 	languageHeader: ".header__lang",
-	logoHeader: ".header__logo"
+	logoHeader: ".header__logo",
+	calendar: ".calendar-grid",
+	dateCalendar: ".calendar-item",
+	totals: ".tickets-totals__fixed",
+	dateTotals: ".tickets-date__format",
+	closeDateTotals: ".tickets-date__close"
 };
