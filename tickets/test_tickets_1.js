@@ -44,8 +44,7 @@ client.addCommand("getUrlAndTitle", function() {
         });
     });
 });
-
-var currentURL = TicketsPage.mainURL+language+'about/'
+var currentURL = TicketsPage.mainURL+language+'about/';
 client.url(currentURL)
     .getUrlAndTitle()
 		.then(function(result){

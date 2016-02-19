@@ -20,7 +20,9 @@ module.exports = {
 	logoHeader: ".header__logo",
 	calendar: ".calendar-grid",
 	dateCalendar: ".calendar-item",
+	dateCalendarProf: ".prof",
 	totals: ".tickets-totals__fixed",
 	dateTotals: ".tickets-date__format",
 	closeDateTotals: ".tickets-date__close"
+	
 };
