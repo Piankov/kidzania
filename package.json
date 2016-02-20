@@ -1,0 +1,25 @@
+{
+  "name": "webdriverio-test",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "wdio-mocha-framework": "^0.2.11",
+    "webdriverio": "^4.0.3",
+    "wdio-junit-reporter": "^0.0.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "wdio wdio.conf.js"	
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Piankov/kidzania.git"
+  },
+  "author": "SergeyPinkov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Piankov/kidzania/issues"
+  },
+  "homepage": "https://github.com/Piankov/kidzania"
+}
