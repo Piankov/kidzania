@@ -10,42 +10,45 @@ describe('Check clicking dates', function(){
 					.then(function(result) {
 						return browser.elementIdText(result.value.ELEMENT);
 					})
-					.then(function(result){
-						console.log('Date:\t' + result.value);
-						return result.value;
-					});
+						//Why I can't just add .value to previous string?
+						.then(function(result){
+							return result.value;
+						});
 	});
 	
 	it('should appear totals', function () {
 
 		var month;
-		var day;
+		var date;
+		var number;
 		return browser.url('https://kidzania.ru/ru/tickets')
-			//.waitForExist('.calendar-scroll-left')
-			.element('.calendar-scroll-left')
+			/* Here I'd like to find all elements witch contain 'high' in 'class' attribute
+			.elements('.calendar-item')
 				.then(function(result){
-					return browser.elementIdText(result.value.ELEMENT);
+					result.value.forEach(function(elem){
+						return browser.elementIdAttribute(elem.ELEMENT,'class')
+					})					
+						.then(function(result){
+							console.log('DEBUG:' + result.value);
+							return browser;
+						})
 				})
-					.then(function(result){
-						month = result.value;
-						return browser;
-					})
+			Although 'high' is mentioned in selector, I still get non-clickable objects as well
+			*/
 			.element('.calendar-item.high:nth-Child(3)')
 				.then(function(result){
-					return browser.elementIdText(result.value.ELEMENT);
+					return browser.elementIdAttribute(result.value.ELEMENT,'data-date-key')
 				})
 					.then(function(result){
-						day = result.value;
+						var tmpDate = result.value;
+						date = tmpDate.match(/-(\d\d)$/)[1] + ' ' + TicketsPage.month[parseInt(tmpDate.match(/-(\d\d)-/)[1])-1];
 						return browser;
 					})
 			.click('.calendar-item.high:nth-Child(3)')
-				.then(function(result){
-					console.log('MONTH' + month);
-					console.log('GAY' + day);
-				})
 			.getTotalDate()
 				.then(function(result){
-					console.log(result);
+					result.should.be.equal(date);
 				});
+
 	})
 })

@@ -9,6 +9,7 @@ module.exports = {
 	dateCalendarProf: ".prof",
 	totals: ".tickets-totals__fixed",
 	dateTotals: ".tickets-date__format",
-	closeDateTotals: ".tickets-date__close"
+	closeDateTotals: ".tickets-date__close",
+	month: ["Января", "Февраля", "Марта", "Апреля", "Мая", "Июня", "Июля", "Августа", "Сентября", "Октября", "Ноября", "Декабря"]
 	
 };
