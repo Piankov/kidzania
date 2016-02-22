@@ -4,13 +4,14 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "mocha": "^2.4.5",
+    "wdio-junit-reporter": "^0.0.2",
     "wdio-mocha-framework": "^0.2.11",
-    "webdriverio": "^4.0.3",
-    "wdio-junit-reporter": "^0.0.2"
+    "webdriverio": "^3.4.0"
   },
   "devDependencies": {},
   "scripts": {
-    "test": "wdio wdio.conf.js"	
+    "test": "wdio wdio.conf.js"
   },
   "repository": {
     "type": "git",
