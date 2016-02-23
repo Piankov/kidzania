@@ -2,6 +2,9 @@
 var assert = require('assert') 
 
 module.exports = {
+	getFormatedDate: function(date){
+		return date.match(/-(\d\d)$/)[1] + ' ' + this.month[parseInt(date.match(/-(\d\d)-/)[1].replace(/^0/,""))-1]
+	},
 	languageHeader: ".header__lang",
 	logoHeader: ".header__logo",
 	calendar: ".calendar-grid",
