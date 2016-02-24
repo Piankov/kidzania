@@ -22,8 +22,8 @@ describe('Check links to ticket pages', function(){
 			});
 	})
 	
-	it('should lead to Билеты from Что такое кидзания?', function () {
-		return browser.url('https://kidzania.ru/en/about')
+	it('should lead to Tickets from KidZania in the world', function () {
+		return browser.url('https://kidzania.ru/en/world')
 		.click('=Tickets')
 		.getUrlAndTitle()
 			.then(function(result){
@@ -32,4 +32,29 @@ describe('Check links to ticket pages', function(){
 			});
 
 	});
+
+	it('should change language from Ru to En', function () {
+		return browser.url('https://kidzania.ru/ru/tickets')
+		.click(TicketsPage.languageHeader)
+		.waitForVisible('=English', 3000)
+		.click('=English')
+		.getUrlAndTitle()
+			.then(function(result){
+				result.title.should.be.equal("Tickets");
+				result.url.should.be.equal('https://kidzania.ru/en/tickets/');
+			});
+	});
+
+	it('should change language from En to Ru', function () {
+		return browser.url('https://kidzania.ru/en/tickets')
+		.click(TicketsPage.languageHeader)
+		.waitForVisible('=Русский', 3000)
+		.click('=Русский')
+		.getUrlAndTitle()
+			.then(function(result){
+				result.title.should.be.equal("Билеты");
+				result.url.should.be.equal('https://kidzania.ru/ru/tickets/');
+			});
+	});
+
 })
