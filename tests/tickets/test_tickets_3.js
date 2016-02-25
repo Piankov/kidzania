@@ -10,7 +10,6 @@ describe('Check clicking dates', function(){
 					.then(function(result) {
 						return browser.elementIdText(result.value.ELEMENT);
 					})
-						//Why I can't just add .value to previous string?
 						.then(function(result){
 							return result.value;
 						});
@@ -30,7 +29,6 @@ describe('Check clicking dates', function(){
 					.then(function(result) {
 						return browser.elementIdText(result.value.ELEMENT);
 					})
-						//Why I can't just add .value to previous string?
 						.then(function(result){
 							return result.value;
 						});
@@ -51,7 +49,7 @@ describe('Check clicking dates', function(){
 		// Check futter appeared and slot is correct
 		this.skip();
 		var slot;
-		return browser.url('https://kidzania.ru/ru/tickets')
+		return browser.url('https://kidzania.ru/' + TicketsPage.langLink() + 'tickets')
 			.click('.calendar-item.high:nth-Child(7)')
 			.scroll('.tickets-slots__item.high')
 			.getElementSlot('.tickets-slots__item.high:nth-Child(2)')
@@ -72,7 +70,7 @@ describe('Check clicking dates', function(){
 		// Check slot in footer has changed
 		this.skip();
 		var slot;
-		return browser.url('https://kidzania.ru/ru/tickets')
+		return browser.url('https://kidzania.ru/' + TicketsPage.langLink() + 'tickets')
 			.click('.calendar-item.high:nth-Child(15)')
 			.scroll('.tickets-slots__item.high')
 			.getElementSlot('.tickets-slots__item.high:nth-Child(4)')
@@ -95,10 +93,10 @@ describe('Check clicking dates', function(){
 		// Check "Выберите дату" appeared (RU) and slot hasn't been changed
 		// Click on any date (which contains this slot)
 		// Date appeared and slot hasn't been changed
-		//this.skip();
+		this.skip();
 		var slot;
 		var date;
-		return browser.url('https://kidzania.ru/ru/tickets')
+		return browser.url('https://kidzania.ru/' + TicketsPage.langLink() + 'tickets')
 			.click('.calendar-item.high:nth-Child(9)')
 			.scroll('.tickets-slots__item.high')
 			.getElementSlot('.tickets-slots__item.high:nth-Child(2)')
@@ -116,7 +114,7 @@ describe('Check clicking dates', function(){
 						return browser.elementIdText(result.value.ELEMENT);
 					})
 						.then(function(result){
-							result.value.should.be.equal('Выберите дату');
+							result.value.should.be.equal(TicketsPage.txtChooseDate());
 						})
 			.getElementDate('.calendar-item.high:nth-Child(11)')
 				.then(function(result){
@@ -133,5 +131,5 @@ describe('Check clicking dates', function(){
 				});
 	})
 
-	
+
 })

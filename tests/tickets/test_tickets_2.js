@@ -28,9 +28,9 @@ describe('Check clicking dates', function(){
 	it('should appear totals', function () {
 		// Click on any date
 		// Check futter appeared and date is correct
-		//this.skip();
+		this.skip();
 		var date;
-		return browser.url('https://kidzania.ru/ru/tickets')
+		return browser.url('https://kidzania.ru/' + TicketsPage.langLink() + 'tickets')
 			/* TODO:
 			Here I'd like to find all elements witch contain 'high' in 'class' attribute
 			.elements('.calendar-item')
@@ -62,12 +62,12 @@ describe('Check clicking dates', function(){
 		// Check futter appeared 
 		// Click on any other date
 		// Check new date is correct
-		//this.skip();
+		this.skip();
 		var date;
 		return browser
 			//TODO: Make deleteCookie remove footer
 			.deleteCookie()
-			.url('https://kidzania.ru/ru/tickets')
+			.url('https://kidzania.ru/' + TicketsPage.langLink() + 'tickets')
 			.getElementDate('.calendar-item.high:nth-Child(3)')
 				.then(function(result){
 					date = result;
@@ -83,7 +83,7 @@ describe('Check clicking dates', function(){
 
 	})
 
-	it('should change date after closing totals', function () {
+	it('should change date after closing totals and clicking on a new one', function () {
 		// Click on any date
 		// Check futter appeared 
 		// Click on X near date
@@ -94,7 +94,7 @@ describe('Check clicking dates', function(){
 		var date;
 
 		
-		return browser.url('https://kidzania.ru/ru/tickets')
+		return browser.url('https://kidzania.ru/' + TicketsPage.langLink() + 'tickets')
 			.getElementDate('.calendar-item.high:nth-Child(34)')
 				.then(function(result){
 					date = result;
