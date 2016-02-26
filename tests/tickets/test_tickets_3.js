@@ -1,47 +1,49 @@
 var TicketsPage = require('../page-models/tickets');
 var should = require('should');
+var Promise = require('bluebird');
 
 describe('Check clicking dates', function(){
 	this.timeout(15000);
 
+
 	browser.addCommand("getTotalDate", function() {
-		return this.waitForExist(TicketsPage.dateTotals)
-				.element(TicketsPage.dateTotals)
-					.then(function(result) {
-						return browser.elementIdText(result.value.ELEMENT);
-					})
-						.then(function(result){
-							return result.value;
-						});
-	});
-	browser.addCommand("getElementDate", function(selector) {
-		return this.element(selector)
-					.then(function(result) {
-						return browser.elementIdAttribute(result.value.ELEMENT,'data-date-key')
-					})
-						.then(function(result){
-							return TicketsPage.getFormatedDate(result.value);
-						});
-	});
-	browser.addCommand("getTotalSlot", function() {
-		return this.waitForExist(TicketsPage.slotTotals)
-				.element(TicketsPage.slotTotals)
-					.then(function(result) {
-						return browser.elementIdText(result.value.ELEMENT);
-					})
-						.then(function(result){
-							return result.value;
-						});
-	});
-	browser.addCommand("getElementSlot", function(selector) {
-		return this.element(selector)
-					.then(function(result) {
-						return browser.elementIdText(result.value.ELEMENT)
-					})
-						.then(function(result){
-							return result.value;
-						});
-	});
+	    return this.waitForExist(TicketsPage.dateTotals)
+		    	.element(TicketsPage.dateTotals)
+			        .then(function(result) {
+			            return browser.elementIdText(result.value.ELEMENT);
+			        })
+			            .then(function(result){
+			                return result.value;
+			            });
+    });
+    browser.addCommand("getElementDate", function(selector) {
+        return this.element(selector)
+                    .then(function(result) {
+                        return browser.elementIdAttribute(result.value.ELEMENT,'data-date-key')
+                    })
+                        .then(function(result){
+                            return TicketsPage.getFormatedDate(result.value);
+                        });
+    });
+    browser.addCommand("getTotalSlot", function() {
+        return this.waitForExist(TicketsPage.slotTotals)
+                .element(TicketsPage.slotTotals)
+                    .then(function(result) {
+                        return browser.elementIdText(result.value.ELEMENT);
+                    })
+                        .then(function(result){
+                            return result.value;
+                        });
+    });
+    browser.addCommand("getElementSlot", function(selector) {
+        return this.element(selector)
+                    .then(function(result) {
+                        return browser.elementIdText(result.value.ELEMENT)
+                    })
+                        .then(function(result){
+                            return result.value;
+                        });
+    });
 
 	it('should appear totals', function () {
 		// Click on any date
@@ -138,7 +140,7 @@ describe('Check clicking dates', function(){
 		// Check "Выберите дату" appeared (RU) and slot hasn't been changed
 		// Click on any date (which contains this slot)
 		// Date appeared and slot hasn't been changed
-		this.skip();
+		//this.skip();
 		var slot;
 		var date;
 		return browser.url('https://kidzania.ru/' + TicketsPage.langLink() + 'tickets')
@@ -146,30 +148,26 @@ describe('Check clicking dates', function(){
 			.elements('.calendar-item.high', function(err, res){
 		        // iterate through elements
 		        console.log('LENGTH = ' + res.value.length);
-		        res.value.forEach(function(elem) {
-		            // execute specific action
-		            console.log('DEBUG1');
-		            browser.elementIdClick(elem.ELEMENT)
-		            	//TODOOOOOOO: Why DEBUG2 isn't printed?!
-		            	.elements('.tickets-slots__item', function(err, res){
-		            			console.log('DEBUG2');
-		            			console.log('LENGTH2 = ' + res.value.length);
-		            		});
-		            		/*browser.elements('.tickets-slots__item.high', function(err, res){
-		            			console.log('DEBUG3');	
-		            			res.value.forEach(function(elem) {
-			            			console.log('DEBUG4');
-			            			return browser.elementIdText(elem.ELEMENT)
-			            				.then(function(result){
-											console.log(result.value);
-									})
-		            			});		
-							})
-								.then(function(result){	
-									console.log('DEBUG5');
-								});*/
-					console.log('DEBUG2,5');		         
-            	})
+		   //       return browser.elementIdClick(res.value[0].ELEMENT)
+					// .elements('.tickets-slots__item', function(err, res){
+					// 		console.log('LENGTH2 = ' + res.value.length);
+					// })
+					// 	.elementIdClick(res.value[1].ELEMENT)
+					// 		.elements('.tickets-slots__item', function(err, res){
+					// 				console.log('LENGTH2 = ' + res.value.length);
+					// 		})
+		        return Promise.reduce(res.value, function(sequence, elem){
+		        	return sequence.then(function(){
+		        		return browser.elementIdClick(elem.ELEMENT)
+			            	.elements('.tickets-slots__item', function(err, res){
+			            			console.log('DEBUG2');
+			            			console.log('LENGTH2 = ' + res.value.length);
+			            		});
+			            		
+							console.log('DEBUG2,5');	
+		        	});
+		           
+           		});
         	})
     })
 
@@ -180,7 +178,7 @@ describe('Check clicking dates', function(){
 		// Check slot in footer disappeared
 		// Click on any other slot
 		// Check slot in footer has changed
-		//this.skip();
+		this.skip();
 		var slot;
 		return browser.url('https://kidzania.ru/' + TicketsPage.langLink() + 'tickets')
 			.click('.calendar-item.high:nth-Child(11)')
