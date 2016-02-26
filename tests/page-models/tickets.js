@@ -12,7 +12,7 @@ module.exports = {
 		}
 		return day + ' ' + this.month[this.language][parseInt(date.match(/-(\d\d)-/)[1].replace(/^0/,""))-1];
 	},
-	language: 0, //0 - English, 1 - Russian
+	language: 1, //0 - English, 1 - Russian
 
 	languageHeader: ".header__lang",
 	logoHeader: ".header__logo",
@@ -34,5 +34,9 @@ module.exports = {
 	txtChooseDate: function(){
 		return this.txtChooseDateArray[this.language];
 	},
-	txtChooseDateArray: ['Choose date', 'Выберите дату']
+	txtChooseDateArray: ['Choose date', 'Выберите дату'],
+	txtChooseSlot: function(){
+		return this.txtChooseSlotArray[this.language];
+	},
+	txtChooseSlotArray: ['Choose session', 'Выберите сеанс']
 };
