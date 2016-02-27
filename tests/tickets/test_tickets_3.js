@@ -141,34 +141,40 @@ describe('Check clicking dates', function(){
 		// Click on any date (which contains this slot)
 		// Date appeared and slot hasn't been changed
 		//this.skip();
+		this.timeout(150000);
 		var slot;
-		var date;
+		var first8 = true;
+		var finish = false
 		return browser.url('https://kidzania.ru/' + TicketsPage.langLink() + 'tickets')
 			.scroll('.tickets-slots__item.high')
 			.elements('.calendar-item.high', function(err, res){
-		        // iterate through elements
-		        console.log('LENGTH = ' + res.value.length);
-		   //       return browser.elementIdClick(res.value[0].ELEMENT)
-					// .elements('.tickets-slots__item', function(err, res){
-					// 		console.log('LENGTH2 = ' + res.value.length);
-					// })
-					// 	.elementIdClick(res.value[1].ELEMENT)
-					// 		.elements('.tickets-slots__item', function(err, res){
-					// 				console.log('LENGTH2 = ' + res.value.length);
-					// 		})
-		        return Promise.reduce(res.value, function(sequence, elem){
-		        	return sequence.then(function(){
-		        		return browser.elementIdClick(elem.ELEMENT)
-			            	.elements('.tickets-slots__item', function(err, res){
-			            			console.log('DEBUG2');
-			            			console.log('LENGTH2 = ' + res.value.length);
-			            		});
-			            		
-							console.log('DEBUG2,5');	
-		        	});
-		           
-           		});
+           		return Promise.each(res.value, function (elem, index) {    
+    				if (!finish){
+	    				return new Promise(function (resolve) {
+	       					browser.elementIdClick(elem.ELEMENT)
+	       						.elements('.tickets-slots__item', function(err, res){
+			          				if ((res.value.length == 8) && (first8)){
+			          					first8 = false;
+			          					browser.elementIdClick(res.value[7].ELEMENT);
+			          				}
+			          				if ((res.value.length == 7) && (!first8)){
+			          					finish = true;
+			          				}
+			          				resolve();
+	       					});
+	    				});
+	    			}
+				});
         	})
+        	.getElementSlot('.tickets-slots__item.high:nth-Child(7)')
+				.then(function(result){
+					slot = result;
+				})
+        	.getTotalSlot()
+				.then(function(result){
+					result.should.be.equal(slot);
+				});
+
     })
 
     it('should remove slot after clicking X', function () {
