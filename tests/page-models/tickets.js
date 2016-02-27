@@ -14,16 +14,7 @@ module.exports = {
 	},
 	language: 1, //0 - English, 1 - Russian
 
-	languageHeader: ".header__lang",
-	logoHeader: ".header__logo",
-	calendar: ".calendar-grid",
-	dateCalendar: ".calendar-item",
-	dateCalendarProf: ".prof",
-	totals: ".tickets-totals__fixed",
-	dateTotals: ".tickets-date__format",
-	closeDateTotals: ".tickets-date__close",
-	slotTotals: ".tickets-slot__format",
-	closeSlotTotals: ".tickets-slot__close",
+	tickets23: '.tickets-action-groups-cell[data-reactid=".0.0.0.2.1.$group-0"] .tickets_group-list_item[data-reactid=".0.0.0.2.1.$group-0.0.1.$1"] .ticket_card_button',
 	month: [['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
 	["Января", "Февраля", "Марта", "Апреля", "Мая", "Июня", "Июля", "Августа", "Сентября", "Октября", "Ноября", "Декабря"]],
 	
@@ -39,4 +30,6 @@ module.exports = {
 		return this.txtChooseSlotArray[this.language];
 	},
 	txtChooseSlotArray: ['Choose session', 'Выберите сеанс']
+
+
 };

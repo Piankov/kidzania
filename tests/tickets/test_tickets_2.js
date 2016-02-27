@@ -2,33 +2,16 @@ var TicketsPage = require('../page-models/tickets');
 var should = require('should');
 
 describe('Check clicking dates', function(){
-	this.timeout(15000);
+	this.timeout(20000);
 
-	browser.addCommand("getTotalDate", function() {
-		return this.waitForExist(TicketsPage.dateTotals)
-				.element(TicketsPage.dateTotals)
-					.then(function(result) {
-						return browser.elementIdText(result.value.ELEMENT);
-					})
-						//Why I can't just add .value to previous string?
-						.then(function(result){
-							return result.value;
-						});
-	});
-	browser.addCommand("getElementDate", function(selector) {
-		return this.element(selector)
-					.then(function(result) {
-						return browser.elementIdAttribute(result.value.ELEMENT,'data-date-key')
-					})
-						.then(function(result){
-							return TicketsPage.getFormatedDate(result.value);
-						});
-	});
+    beforeEach(function(){
+    		browser.localStorage('DELETE');
+    });
 
 	it('should appear totals', function () {
 		// Click on any date
 		// Check futter appeared and date is correct
-		this.skip();
+		//this.skip();
 		var date;
 		return browser.url('https://kidzania.ru/' + TicketsPage.langLink() + 'tickets')
 			/* TODO:
@@ -62,20 +45,20 @@ describe('Check clicking dates', function(){
 		// Check futter appeared 
 		// Click on any other date
 		// Check new date is correct
-		this.skip();
+		//this.skip();
 		var date;
 		return browser
-			//TODO: Make deleteCookie remove footer
-			.deleteCookie()
+			//TODO: TRY!!!
+			.localStorage('DELETE')
 			.url('https://kidzania.ru/' + TicketsPage.langLink() + 'tickets')
-			.getElementDate('.calendar-item.high:nth-Child(3)')
+			.getElementDate('.calendar-item.high:nth-Child(4)')
 				.then(function(result){
 					date = result;
 				})
 			.click('.calendar-item.high:nth-Child(36)')
 			.getTotalDate()
 			.scroll('.calendar-item.high')
-			.click('.calendar-item.high:nth-Child(3)')
+			.click('.calendar-item.high:nth-Child(4)')
 			.getTotalDate()
 				.then(function(result){
 					result.should.be.equal(date);
@@ -99,10 +82,10 @@ describe('Check clicking dates', function(){
 				.then(function(result){
 					date = result;
 				})
-			.click('.calendar-item.high:nth-Child(2)')
+			.click('.calendar-item.high:nth-Child(4)')
 			.getTotalDate()
-			.click(TicketsPage.closeDateTotals)
-			.waitForExist(TicketsPage.dateTotals, 500, true)
+			.click('.tickets-date__close')
+			.waitForExist('.tickets-date__format', 500, true)
 			.click('.calendar-item.high:nth-Child(34)')
 			.getTotalDate()
 				.then(function(result){

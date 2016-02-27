@@ -5,51 +5,15 @@ var Promise = require('bluebird');
 describe('Check clicking dates', function(){
 	this.timeout(15000);
 
-
-	browser.addCommand("getTotalDate", function() {
-	    return this.waitForExist(TicketsPage.dateTotals)
-		    	.element(TicketsPage.dateTotals)
-			        .then(function(result) {
-			            return browser.elementIdText(result.value.ELEMENT);
-			        })
-			            .then(function(result){
-			                return result.value;
-			            });
-    });
-    browser.addCommand("getElementDate", function(selector) {
-        return this.element(selector)
-                    .then(function(result) {
-                        return browser.elementIdAttribute(result.value.ELEMENT,'data-date-key')
-                    })
-                        .then(function(result){
-                            return TicketsPage.getFormatedDate(result.value);
-                        });
-    });
-    browser.addCommand("getTotalSlot", function() {
-        return this.waitForExist(TicketsPage.slotTotals)
-                .element(TicketsPage.slotTotals)
-                    .then(function(result) {
-                        return browser.elementIdText(result.value.ELEMENT);
-                    })
-                        .then(function(result){
-                            return result.value;
-                        });
-    });
-    browser.addCommand("getElementSlot", function(selector) {
-        return this.element(selector)
-                    .then(function(result) {
-                        return browser.elementIdText(result.value.ELEMENT)
-                    })
-                        .then(function(result){
-                            return result.value;
-                        });
+	beforeEach(function(){
+    		browser.localStorage('DELETE');
     });
 
 	it('should appear totals', function () {
 		// Click on any date
 		// Click on any slot
 		// Check futter appeared and slot is correct
-		this.skip();
+		//this.skip();
 		var slot;
 		return browser.url('https://kidzania.ru/' + TicketsPage.langLink() + 'tickets')
 			.click('.calendar-item.high:nth-Child(7)')
@@ -70,10 +34,10 @@ describe('Check clicking dates', function(){
 		// Click on any slot
 		// Click on any other slot
 		// Check slot in footer has changed
-		this.skip();
+		//this.skip();
 		var slot;
 		return browser.url('https://kidzania.ru/' + TicketsPage.langLink() + 'tickets')
-			.click('.calendar-item.high:nth-Child(15)')
+			.click('.calendar-item.high:nth-Child(11)')
 			.scroll('.tickets-slots__item.high')
 			.getElementSlot('.tickets-slots__item.high:nth-Child(4)')
 				.then(function(result){
@@ -95,7 +59,7 @@ describe('Check clicking dates', function(){
 		// Check "Выберите дату" appeared (RU) and slot hasn't been changed
 		// Click on any date (which contains this slot)
 		// Date appeared and slot hasn't been changed
-		this.skip();
+		//this.skip();
 		var slot;
 		var date;
 		return browser.url('https://kidzania.ru/' + TicketsPage.langLink() + 'tickets')
@@ -106,7 +70,7 @@ describe('Check clicking dates', function(){
 					slot = result;
 				})
 			.click('.tickets-slots__item.high:nth-Child(2)')
-			.click(TicketsPage.closeDateTotals)
+			.click('.tickets-date__close')
 			.getTotalSlot()
 				.then(function(result){
 					result.should.be.equal(slot);
@@ -184,7 +148,7 @@ describe('Check clicking dates', function(){
 		// Check slot in footer disappeared
 		// Click on any other slot
 		// Check slot in footer has changed
-		this.skip();
+		//this.skip();
 		var slot;
 		return browser.url('https://kidzania.ru/' + TicketsPage.langLink() + 'tickets')
 			.click('.calendar-item.high:nth-Child(11)')

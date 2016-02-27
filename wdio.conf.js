@@ -1,3 +1,4 @@
+var TicketsPage = require('./tests/page-models/tickets');
 exports.config = {
     
     //
@@ -117,8 +118,54 @@ exports.config = {
     //
     // Gets executed before test execution begins. At this point you can access to all global
     // variables like `browser`. It is the perfect place to define custom commands.
-    // before: function (capabilties, specs) {
-    // },
+     before: function (capabilties, specs) {
+        browser.addCommand("getUrlAndTitle", function() {
+            return this.getUrl().then(function(urlResult) {
+                return this.getTitle().then(function(titleResult) {
+                    return { url: urlResult, title: titleResult };
+                });
+            });
+        });
+        browser.addCommand("getTotalDate", function() {
+            return this.waitForExist('.tickets-date__format')
+                    .element('.tickets-date__format')
+                        .then(function(result) {
+                            return browser.elementIdText(result.value.ELEMENT);
+                        })
+                            .then(function(result){
+                                return result.value;
+                            });
+        });
+        browser.addCommand("getElementDate", function(selector) {
+            return this.element(selector)
+                        .then(function(result) {
+                            return browser.elementIdAttribute(result.value.ELEMENT,'data-date-key')
+                        })
+                            .then(function(result){
+                                return TicketsPage.getFormatedDate(result.value);
+                            });
+        });
+        browser.addCommand("getTotalSlot", function() {
+            return this.waitForExist('.tickets-slot__format')
+                    .element('.tickets-slot__format')
+                        .then(function(result) {
+                            return browser.elementIdText(result.value.ELEMENT);
+                        })
+                            .then(function(result){
+                                return result.value;
+                            });
+        });
+        browser.addCommand("getElementSlot", function(selector) {
+            return this.element(selector)
+                        .then(function(result) {
+                            return browser.elementIdText(result.value.ELEMENT)
+                        })
+                            .then(function(result){
+                                return result.value;
+                            });
+        });
+        
+     },
     //
     // Hook that gets executed before the suite starts
     // beforeSuite: function (suite) {
@@ -135,7 +182,8 @@ exports.config = {
     // },
     //
     // Function to be executed before a test (in Mocha/Jasmine) or a step (in Cucumber) starts.
-    // beforeTest: function (test) {
+     //beforeTest: function (test) {
+     //   browser.localStorage('DELETE');
     // },
     //
     // Runs before a WebdriverIO command gets executed.

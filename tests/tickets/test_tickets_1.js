@@ -2,15 +2,7 @@ var TicketsPage = require('../page-models/tickets');
 var should = require('should');
 
 describe('Check links to ticket pages', function(){
-	this.timeout(15000);
-	
-	browser.addCommand("getUrlAndTitle", function() {
-		return this.getUrl().then(function(urlResult) {
-			return this.getTitle().then(function(titleResult) {
-				return { url: urlResult, title: titleResult };
-			});
-		});
-	});
+	this.timeout(20000);
 	
 	it('should lead to Билеты from Что такое кидзания?', function () {
 		return browser.url('https://kidzania.ru/ru/about')
@@ -35,7 +27,7 @@ describe('Check links to ticket pages', function(){
 
 	it('should change language from Ru to En', function () {
 		return browser.url('https://kidzania.ru/ru/tickets')
-		.click(TicketsPage.languageHeader)
+		.click('.header__lang')
 		.waitForVisible('=English', 3000)
 		.click('=English')
 		.getUrlAndTitle()
@@ -47,7 +39,7 @@ describe('Check links to ticket pages', function(){
 
 	it('should change language from En to Ru', function () {
 		return browser.url('https://kidzania.ru/en/tickets')
-		.click(TicketsPage.languageHeader)
+		.click('.header__lang')
 		.waitForVisible('=Русский', 3000)
 		.click('=Русский')
 		.getUrlAndTitle()
