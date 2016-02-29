@@ -1,4 +1,6 @@
 var TicketsPage = require('./tests/page-models/tickets');
+var Promise = require('bluebird');
+var should = require('should');
 exports.config = {
     
     //
@@ -163,6 +165,96 @@ exports.config = {
                             .then(function(result){
                                 return result.value;
                             });
+        });
+
+        browser.addCommand("clickX", function(age) {
+            return browser.elements('.tickets-product', function(err, res){
+                return Promise.each(res.value, function (elem, index) {
+                    return new Promise(function (resolve) {
+                        browser.elementIdElement(elem.ELEMENT, age)
+                            .then (function(res, err){
+                                browser.elementIdElement(elem.ELEMENT, '.tickets-product__close')
+                                    .then(function(res){
+                                        browser.elementIdClick(res.value.ELEMENT)
+                                            .then(function(result){
+                                                resolve();
+                                            });
+                                    });
+                            })
+                            .catch (function(res, err){
+                                resolve();
+                            });
+                    });
+                });
+            })
+        });
+        browser.addCommand("checkTicketsNumbers", function(sel, qty) {
+            browser.element(sel)
+                .then(function(result) {
+                    return browser.elementIdText(result.value.ELEMENT);
+                })
+                    .then(function(result){
+                        var str = result.value.match(/ (\d*) /)[1];
+                        console.log('compare ' + str +  ' with ' + qty);
+                        str.should.be.equal(qty);
+                    });
+        });
+        browser.addCommand("getTicketsNumbers", function() {
+            // TODO: Add checking near buttons
+            var resultArray = [0, 0, 0];
+            var qty;
+            return this.elements('.tickets-product', function(err, res){
+                return Promise.each(res.value, function (elem, index) {
+                    return new Promise(function (resolve) {
+                        qty = 1;
+                        browser.elementIdElement(elem.ELEMENT, '.tickets-product__quantity')
+                            .then(function(res){
+                                browser.elementIdText(res.value.ELEMENT)
+                                    .then(function(result){
+                                        qty = parseInt(result.value.match(/^(\d*)\D/)[1]);
+                                        return result.value;
+                                    });
+                            })
+                            .catch(function(res){
+                                qty = 1;
+                                return 1;
+                            })
+                        .elementIdElement(elem.ELEMENT, '.icon-child-carriage')
+                            .then (function(res, err){
+                                //TODO Change teen to carriage here, It should fail but it doesn't!!!
+                                browser.checkTicketsNumbers(TicketsPage.teen + ' .ticket_card_info-additional_info', qty)
+                                    .then(function(res){
+                                        resultArray[0] += qty;
+                                        resolve();
+                                    });
+                            })
+                            .catch (function(res, err){
+                                browser.elementIdElement(elem.ELEMENT, '.icon-child-teen')
+                                    .then (function(res, err){
+                                        browser.checkTicketsNumbers(TicketsPage.teen + ' .ticket_card_info-additional_info', qty);
+                                        resultArray[1] += qty;
+                                        resolve();
+                                    })
+                                    .catch (function(res, err){
+                                        browser.elementIdElement(elem.ELEMENT, '.icon-adult')
+                                            .then (function(res, err){
+                                                browser.checkTicketsNumbers(TicketsPage.adult + ' .ticket_card_info-additional_info', qty);
+                                                resultArray[2] += qty;
+                                                resolve();
+                                            })
+                                            .catch (function(res, err){
+                                                console.log('res: ' + res);
+                                                console.log('err: ' + err);
+                                                resolve();
+                                            });
+                                    });
+                            });
+                    });
+                });           
+            })
+            .then(function(res){
+                return resultArray;
+            });
         });
         
      },

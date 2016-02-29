@@ -5,59 +5,7 @@ var Promise = require('bluebird');
 describe('Check clicking dates', function(){
 	this.timeout(15000);
 
-	browser.addCommand("getTicketsNumbers", function() {
-		// TODO: Add checking near buttons
-		var resultArray = [0, 0, 0];
-		var qty;
-        return this.elements('.tickets-product', function(err, res){
-        	return Promise.each(res.value, function (elem, index) {
-				return new Promise(function (resolve) {
-        			console.log(elem.ELEMENT);
-        			qty = 1;
-        			browser.elementIdElement(elem.ELEMENT, '.tickets-product__quantity')
-        				.then(function(res){
-        					browser.elementIdText(res.value.ELEMENT)
-        						.then(function(result){
-									qty = parseInt(result.value.match(/^(\d*)\D/)[1]);
-									return result.value;
-                             	});
-        				})
-        				.catch(function(res){
-        					qty = 1;
-        					return 1;
-        				})
-        			.elementIdElement(elem.ELEMENT, '.icon-child-carriage')
-        				.then (function(res, err){
-	        				resultArray[0] += qty;
-	        				resolve();
-        				})
-        				.catch (function(res, err){
-        					browser.elementIdElement(elem.ELEMENT, '.icon-child-teen')
-        						.then (function(res, err){
-			        				resultArray[1] += qty;
-			        				resolve();
-        						})
-        						.catch (function(res, err){
-        							browser.elementIdElement(elem.ELEMENT, '.icon-adult')
-        								.then (function(res, err){
-					        				resultArray[2] += qty;
-					        				resolve();
-		        						})
-		        						.catch (function(res, err){
-					                        console.log('res: ' + res);
-					        				console.log('err: ' + err);
-					        				resolve();
-		        						});
-        						});
-        				});
-        		});
-	    	});           
-        })
-        .then(function(res){
-        	console.log('resultArray: ' + resultArray);
-        	return resultArray;
-        });
-    });
+	
 
 	beforeEach(function(){
     		browser.localStorage('DELETE');
@@ -72,7 +20,7 @@ describe('Check clicking dates', function(){
 		// Check adult message is shown
 		// Close adult message
 		// Check one 2-3 and one adult are added
-		this.skip();
+		//this.skip();
 		var date;
 		var slot;
 		return browser.url('https://kidzania.ru/' + TicketsPage.langLink() + 'tickets')
@@ -84,7 +32,7 @@ describe('Check clicking dates', function(){
 			.scroll('.tickets-slots__item.high')			
 			.click('.tickets-slots__item.high:nth-Child(1)')
 			.scroll('.ticket_card_button')
-			.click(TicketsPage.carriage)
+			.click(TicketsPage.carriage + ' .ticket_card_button')
 			.waitForVisible('.tickets-adult-hint')
 			.click('.tickets-adult-hint__close')
 			.getTotalDate()
@@ -119,6 +67,7 @@ describe('Check clicking dates', function(){
 		// Repeat for adult
 
 		//this.skip();
+		this.timeout(60000);
 		var date;
 		var slot;
 		return browser.url('https://kidzania.ru/' + TicketsPage.langLink() + 'tickets')
@@ -128,13 +77,53 @@ describe('Check clicking dates', function(){
 			.scroll('.ticket_card_button')
 			.click(TicketsPage.carriage + ' .ticket_card_button')
 			.click(TicketsPage.teen + ' .ticket_card_button')
-			.click(TicketsPage.teen + ' .ticket_card_button')
 			.waitForVisible('.tickets-adult-hint')
 			.click('.tickets-adult-hint__close')
 			.getTicketsNumbers()
 				.then(function(result){
-					console.log('CCC' + result);
+					result.should.be.eql([1, 1, 1]);
+				})			
+			.click(TicketsPage.teen + ' .ticket_card_button')
+			.click(TicketsPage.teen + ' .ticket_card_button')
+			.getTicketsNumbers()
+				.then(function(result){
+					result.should.be.eql([1, 3, 1]);
 				})
+			.click(TicketsPage.carriage + ' .ticket_card_button')
+			.click(TicketsPage.carriage + ' .ticket_card_button')
+			.click(TicketsPage.carriage + ' .ticket_card_button')
+			.click(TicketsPage.carriage + ' .ticket_card_button')
+			.getTicketsNumbers()
+				.then(function(result){
+					result.should.be.eql([5, 3, 1]);
+				})
+			.scroll(TicketsPage.adult + ' .ticket_card_button')
+			.click(TicketsPage.adult + ' .ticket_card_button')
+			.click(TicketsPage.adult + ' .ticket_card_button')
+			.click(TicketsPage.adult + ' .ticket_card_button')
+			.getTicketsNumbers()
+				.then(function(result){
+					result.should.be.eql([5, 3, 4]);
+				})
+			.click(TicketsPage.adult + ' .ticket_card_button--simple')
+			.click(TicketsPage.adult + ' .ticket_card_button--simple')
+			.click(TicketsPage.adult + ' .ticket_card_button--simple')
+			.getTicketsNumbers()
+				.then(function(result){
+					result.should.be.eql([5, 3, 1]);
+				})
+			.click(TicketsPage.teen + ' .ticket_card_button--simple')
+			.click(TicketsPage.teen + ' .ticket_card_button--simple')
+			.click(TicketsPage.teen + ' .ticket_card_button--simple')
+			.getTicketsNumbers()
+				.then(function(result){
+					result.should.be.eql([5, 0, 1]);
+				})
+			.clickX('.icon-child-carriage')
+	       	.getTicketsNumbers()
+				.then(function(result){
+					result.should.be.eql([0, 0, 1]);
+				});
 			
 	})
 	

@@ -14,7 +14,11 @@ module.exports = {
 	},
 	language: 1, //0 - English, 1 - Russian
 
-	tickets23: '.tickets-action-groups-cell[data-reactid=".0.0.0.2.1.$group-0"] .tickets_group-list_item[data-reactid=".0.0.0.2.1.$group-0.0.1.$1"] .ticket_card_button',
+	//I'm not proud for this:
+	carriage: '.tickets-action-groups-cell[data-reactid=".0.0.0.2.1.$group-0"] .tickets_group-list_item[data-reactid=".0.0.0.2.1.$group-0.0.1.$1"]',
+	teen: '.tickets-action-groups-cell[data-reactid=".0.0.0.2.1.$group-0"] .tickets_group-list_item[data-reactid=".0.0.0.2.1.$group-0.0.1.$2"]',
+	adult: '.tickets-action-groups-cell[data-reactid=".0.0.0.2.1.$group-1"] .tickets_group-list_item',
+
 	month: [['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
 	["Января", "Февраля", "Марта", "Апреля", "Мая", "Июня", "Июля", "Августа", "Сентября", "Октября", "Ноября", "Декабря"]],
 	
