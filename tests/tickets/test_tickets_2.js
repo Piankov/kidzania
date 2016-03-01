@@ -37,7 +37,6 @@ describe('Check clicking dates', function(){
 				.then(function(result){
 					result.should.be.equal(date);
 				});
-
 	})
 
 	it('should change date in totals', function () {
@@ -48,8 +47,6 @@ describe('Check clicking dates', function(){
 		//this.skip();
 		var date;
 		return browser
-			//TODO: TRY!!!
-			.localStorage('DELETE')
 			.url('https://kidzania.ru/' + TicketsPage.langLink() + 'tickets')
 			.getElementDate('.calendar-item.high:nth-Child(6)')
 				.then(function(result){
@@ -63,7 +60,6 @@ describe('Check clicking dates', function(){
 				.then(function(result){
 					result.should.be.equal(date);
 				});
-
 	})
 
 	it('should change date after closing totals and clicking on a new one', function () {
@@ -75,7 +71,6 @@ describe('Check clicking dates', function(){
 		// Check new date is correct
 		//this.skip();
 		var date;
-
 		
 		return browser.url('https://kidzania.ru/' + TicketsPage.langLink() + 'tickets')
 			.getElementDate('.calendar-item.high:nth-Child(5)')
@@ -91,6 +86,5 @@ describe('Check clicking dates', function(){
 				.then(function(result){
 					result.should.be.equal(date);
 				});
-
 	})
 })

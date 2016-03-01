@@ -118,10 +118,7 @@ describe('Check filled form', function(){
 			.getValue('.tickets-details__input')
 				.then(function(result){
 					result.should.be.eql('AAA@AAA.AA');
-				})
-
-			
-			
+				})			
 	});
 	
 })

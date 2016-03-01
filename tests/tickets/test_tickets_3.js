@@ -27,8 +27,8 @@ describe('Check clicking slots', function(){
 				.then(function(result){
 					result.should.be.equal(slot);
 				});
-
 	})
+
 	it('should change slot in totals', function () {
 		// Click on any date
 		// Click on any slot
@@ -49,7 +49,6 @@ describe('Check clicking slots', function(){
 				.then(function(result){
 					result.should.be.equal(slot);
 				});
-
 	})
 
 	it('should save slot when date is canceled', function () {
@@ -171,7 +170,6 @@ describe('Check clicking slots', function(){
 				.then(function(result){
 					result.should.be.equal(slot);
 				});
-
 	})
 
 })

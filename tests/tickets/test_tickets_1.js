@@ -22,7 +22,6 @@ describe('Check links to ticket pages', function(){
 				result.title.should.be.equal("Tickets");
 				result.url.should.be.equal('https://kidzania.ru/en/tickets/');
 			});
-
 	});
 
 	it('should change language from Ru to En', function () {

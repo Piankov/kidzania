@@ -198,18 +198,20 @@ exports.config = {
             })
         });
         browser.addCommand("checkTicketsNumbers", function(sel, qty) {
-            browser.element(sel)
+            return browser.element(sel)
                 .then(function(result) {
-                    return browser.elementIdText(result.value.ELEMENT);
-                })
-                    .then(function(result){
-                        var str = result.value.match(/ (\d*) /)[1];
-                        console.log('compare ' + str +  ' with ' + qty);
-                        str.should.be.equal(qty);
-                    });
+                    return browser.elementIdText(result.value.ELEMENT)
+                        .then(function(result){
+                            var str = result.value.match(/ (\d*) /)[1];
+                            //console.log('compare ' + str +  ' with ' + qty);
+                            //TODO: It hangs when qty != str
+                            qty.should.be.eql(str);
+                            return result;
+                        });
+                });
+                   
         });
         browser.addCommand("getTicketsNumbers", function() {
-            // TODO: Add checking near buttons
             var resultArray = [0, 0, 0];
             var qty;
             return this.elements('.tickets-product', function(err, res){
@@ -230,8 +232,7 @@ exports.config = {
                             })
                         .elementIdElement(elem.ELEMENT, '.icon-child-carriage')
                             .then (function(res, err){
-                                //TODO Change teen to carriage here, It should fail but it doesn't!!!
-                                browser.checkTicketsNumbers(TicketsPage.teen + ' .ticket_card_info-additional_info', qty)
+                                browser.checkTicketsNumbers(TicketsPage.carriage + ' .ticket_card_info-additional_info', qty)
                                     .then(function(res){
                                         resultArray[0] += qty;
                                         resolve();

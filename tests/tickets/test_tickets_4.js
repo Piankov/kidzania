@@ -3,9 +3,7 @@ var should = require('should');
 var Promise = require('bluebird');
 
 describe('Check chosing tickets', function(){
-	this.timeout(15000);
-
-	
+	this.timeout(15000);	
 
 	beforeEach(function(){
     		browser.localStorage('DELETE');
@@ -134,8 +132,7 @@ describe('Check chosing tickets', function(){
 	       	.getTicketsNumbers()
 				.then(function(result){
 					result.should.be.eql([0, 0, 1]);
-				});
-			
+				});			
 	});
 
 	it('should remove adult correctly', function () {
