@@ -147,6 +147,15 @@ exports.config = {
                                 return TicketsPage.getFormatedDate(result.value);
                             });
         });
+        browser.addCommand("getElementDateOppositeLang", function(selector) {
+            return this.element(selector)
+                        .then(function(result) {
+                            return browser.elementIdAttribute(result.value.ELEMENT,'data-date-key')
+                        })
+                            .then(function(result){
+                                return TicketsPage.getFormatedDateByLang(result.value, 1 - TicketsPage.language);
+                            });
+        });
         browser.addCommand("getTotalSlot", function() {
             return this.waitForExist('.tickets-slot__format')
                     .element('.tickets-slot__format')
@@ -166,7 +175,7 @@ exports.config = {
                                 return result.value;
                             });
         });
-
+        //here age is selector of coresponding icon.
         browser.addCommand("clickX", function(age) {
             return browser.elements('.tickets-product', function(err, res){
                 return Promise.each(res.value, function (elem, index) {
@@ -255,6 +264,17 @@ exports.config = {
             .then(function(res){
                 return resultArray;
             });
+        });
+
+        browser.addCommand("isPayEnanbled", function(shouldBeEnabled) {
+            return browser.element('.tickets-buy__button')
+                .then(function(elem){
+                    return browser.elementIdAttribute(elem.value.ELEMENT,'disabled')
+                        .then(function(res){
+                            if (shouldBeEnabled) should.not.exist(res.value);
+                            else should.exist(res.value);
+                        })
+                });
         });
         
      },

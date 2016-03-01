@@ -2,7 +2,7 @@ var TicketsPage = require('../page-models/tickets');
 var should = require('should');
 var Promise = require('bluebird');
 
-describe('Check clicking dates', function(){
+describe('Check clicking slots', function(){
 	this.timeout(15000);
 
 	beforeEach(function(){
@@ -16,7 +16,7 @@ describe('Check clicking dates', function(){
 		//this.skip();
 		var slot;
 		return browser.url('https://kidzania.ru/' + TicketsPage.langLink() + 'tickets')
-			.click('.calendar-item.high:nth-Child(7)')
+			.click('.calendar-item.high:nth-Child(6)')
 			.scroll('.tickets-slots__item.high')
 			.getElementSlot('.tickets-slots__item.high:nth-Child(2)')
 				.then(function(result){
@@ -39,12 +39,12 @@ describe('Check clicking dates', function(){
 		return browser.url('https://kidzania.ru/' + TicketsPage.langLink() + 'tickets')
 			.click('.calendar-item.high:nth-Child(11)')
 			.scroll('.tickets-slots__item.high')
-			.getElementSlot('.tickets-slots__item.high:nth-Child(4)')
+			.getElementSlot('.tickets-slots__item.high:nth-Child(6)')
 				.then(function(result){
 					slot = result;
 				})
 			.click('.tickets-slots__item.high:nth-Child(1)')
-			.click('.tickets-slots__item.high:nth-Child(4)')
+			.click('.tickets-slots__item.high:nth-Child(6)')
 			.getTotalSlot()
 				.then(function(result){
 					result.should.be.equal(slot);

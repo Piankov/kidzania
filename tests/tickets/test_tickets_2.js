@@ -28,11 +28,11 @@ describe('Check clicking dates', function(){
 				})
 			Although 'high' is mentioned in selector, I still get non-clickable objects as well
 			*/
-			.getElementDate('.calendar-item.high:nth-Child(4)')
+			.getElementDate('.calendar-item.high:nth-Child(6)')
 				.then(function(result){
 					date = result;
 				})
-			.click('.calendar-item.high:nth-Child(4)')
+			.click('.calendar-item.high:nth-Child(6)')
 			.getTotalDate()
 				.then(function(result){
 					result.should.be.equal(date);
@@ -51,14 +51,14 @@ describe('Check clicking dates', function(){
 			//TODO: TRY!!!
 			.localStorage('DELETE')
 			.url('https://kidzania.ru/' + TicketsPage.langLink() + 'tickets')
-			.getElementDate('.calendar-item.high:nth-Child(4)')
+			.getElementDate('.calendar-item.high:nth-Child(6)')
 				.then(function(result){
 					date = result;
 				})
 			.click('.calendar-item.high:nth-Child(36)')
 			.getTotalDate()
 			.scroll('.calendar-item.high')
-			.click('.calendar-item.high:nth-Child(4)')
+			.click('.calendar-item.high:nth-Child(6)')
 			.getTotalDate()
 				.then(function(result){
 					result.should.be.equal(date);
@@ -78,15 +78,15 @@ describe('Check clicking dates', function(){
 
 		
 		return browser.url('https://kidzania.ru/' + TicketsPage.langLink() + 'tickets')
-			.getElementDate('.calendar-item.high:nth-Child(34)')
+			.getElementDate('.calendar-item.high:nth-Child(5)')
 				.then(function(result){
 					date = result;
 				})
-			.click('.calendar-item.high:nth-Child(4)')
+			.click('.calendar-item.high:nth-Child(6)')
 			.getTotalDate()
 			.click('.tickets-date__close')
 			.waitForExist('.tickets-date__format', 500, true)
-			.click('.calendar-item.high:nth-Child(34)')
+			.click('.calendar-item.high:nth-Child(5)')
 			.getTotalDate()
 				.then(function(result){
 					result.should.be.equal(date);
