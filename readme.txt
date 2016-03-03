@@ -21,7 +21,6 @@ npm test
 *What is not covered yet:*
 **************************
 1) Clicking on month names and movings calendar
-2) Checking summ of order
 
 **************
 *Futher plans*

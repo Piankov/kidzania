@@ -22,7 +22,6 @@ describe('Check filled form', function(){
 		// Remove and return date
 		// Remove and return slot
 		// Remove and return tickets
-
 		
 		//this.skip();
 		return browser.url('https://kidzania.ru/' + TicketsPage.langLink() + 'tickets')
@@ -64,7 +63,6 @@ describe('Check filled form', function(){
 		// Fill email
 		// Change language to opposite
 		// Check all data
-
 		
 		//this.skip();
 		var date;
@@ -119,6 +117,54 @@ describe('Check filled form', function(){
 				.then(function(result){
 					result.should.be.eql('AAA@AAA.AA');
 				})			
+	});
+
+	it('should count summ correctly', function () {
+		// Click on any bussines day 
+		// Click on any slot
+		// Click twice on ticket card 2-3 years
+		// Click twice on ticket card 4-14 years
+		// Check adult alert has appeared
+		// Close alert window
+		// Check summ
+		// Chose any holyday
+		// Check summ has changed
+		// Remove adult ticket
+		// Check summ has changed
+
+		//this.skip();
+		return browser.url('https://kidzania.ru/' + TicketsPage.langLink() + 'tickets')
+			//TODO: Here should be bussines day
+			.click('.calendar-item.high:nth-Child(8)')
+			.scroll('.tickets-slots__item.high')			
+			.click('.tickets-slots__item.high:nth-Child(1)')
+			.scroll('.ticket_card_button')
+			.click(TicketsPage.carriage + ' .ticket_card_button')
+			.click(TicketsPage.carriage + ' .ticket_card_button')
+			.click(TicketsPage.teen + ' .ticket_card_button')
+			.click(TicketsPage.teen + ' .ticket_card_button')
+			.waitForVisible('.tickets-adult-hint')
+			.click('.tickets-adult-hint__close')
+			.getText('.tickets-pay__amount ')
+				.then(function(result){
+					var str = result.match(/ (\d*) /)[1];
+					var counted = TicketsPage.price.carriage[0]*2+TicketsPage.price.teen[0]*2 + TicketsPage.price.adult[0];
+					str.should.be.eql(counted);
+				})
+			.click('.calendar-item.holyday.high:nth-Child(10)')
+			.getText('.tickets-pay__amount ')
+				.then(function(result){
+					var str = result.match(/ (\d*) /)[1];
+					var counted = TicketsPage.price.carriage[1]*2+TicketsPage.price.teen[1]*2 + TicketsPage.price.adult[1];
+					str.should.be.eql(counted);
+				})
+			.clickX('.icon-adult')
+			.getText('.tickets-pay__amount ')
+				.then(function(result){
+					var str = result.match(/ (\d*) /)[1];
+					var counted = TicketsPage.price.carriage[1]*2+TicketsPage.price.teen[1]*2;
+					str.should.be.eql(counted);
+				})
 	});
 	
 })

@@ -178,7 +178,7 @@ describe('Check chosing tickets', function(){
 	});
 
 	it('should process removing date correctly', function () {
-		// Click on any date
+		// Click on any holyday date
 		// Click on any slot
 		// Click on ticket card 4-14 years
 		// Check adult alert has appeared
