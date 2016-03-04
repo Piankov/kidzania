@@ -16,18 +16,25 @@ describe('Check clicking slots', function(){
 		//this.skip();
 		var slot;
 		return browser.url('https://kidzania.ru/' + TicketsPage.langLink() + 'tickets')
-			.click('.calendar-item.high:nth-Child(6)')
-			.scroll('.tickets-slots__item.high')
-			.getElementSlot('.tickets-slots__item.high:nth-Child(2)')
+			.elements('.calendar-item.high')
 				.then(function(result){
-					slot = result;
-				})
-			.click('.tickets-slots__item.high:nth-Child(2)')
-			.getTotalSlot()
-				.then(function(result){
-					result.should.be.equal(slot);
+					return browser
+						.elementIdClick(result.value[1].ELEMENT)
+						.scroll('.tickets-slots__item.high')
+						.elements('.tickets-slots__item.high')
+							.then(function(result){
+								return browser.getElementSlotByID(result.value[1].ELEMENT)
+										.then(function(result){
+											slot = result;
+										})
+									.elementIdClick(result.value[1].ELEMENT)
+									.getTotalSlot()
+										.then(function(result){
+											result.should.be.equal(slot);
+										});
+							});
 				});
-	})
+	});
 
 	it('should change slot in totals', function () {
 		// Click on any date
@@ -37,19 +44,26 @@ describe('Check clicking slots', function(){
 		//this.skip();
 		var slot;
 		return browser.url('https://kidzania.ru/' + TicketsPage.langLink() + 'tickets')
-			.click('.calendar-item.high:nth-Child(11)')
-			.scroll('.tickets-slots__item.high')
-			.getElementSlot('.tickets-slots__item.high:nth-Child(6)')
+			.elements('.calendar-item.high')
 				.then(function(result){
-					slot = result;
-				})
-			.click('.tickets-slots__item.high:nth-Child(1)')
-			.click('.tickets-slots__item.high:nth-Child(6)')
-			.getTotalSlot()
-				.then(function(result){
-					result.should.be.equal(slot);
+					return browser
+						.elementIdClick(result.value[1].ELEMENT)
+						.scroll('.tickets-slots__item.high')
+						.elements('.tickets-slots__item.high')
+							.then(function(result){
+								return browser.getElementSlotByID(result.value[2].ELEMENT)
+										.then(function(result){
+											slot = result;
+										})
+									.elementIdClick(result.value[1].ELEMENT)
+									.elementIdClick(result.value[2].ELEMENT)
+									.getTotalSlot()
+										.then(function(result){
+											result.should.be.equal(slot);
+										});
+							});
 				});
-	})
+	});
 
 	it('should save slot when date is canceled', function () {
 		// Click on any date
@@ -59,42 +73,52 @@ describe('Check clicking slots', function(){
 		// Click on any date (which contains this slot)
 		// Date appeared and slot hasn't been changed
 		//this.skip();
+
+		this.timeout(25000);
 		var slot;
 		var date;
 		return browser.url('https://kidzania.ru/' + TicketsPage.langLink() + 'tickets')
-			.click('.calendar-item.high:nth-Child(9)')
-			.scroll('.tickets-slots__item.high')
-			.getElementSlot('.tickets-slots__item.high:nth-Child(2)')
-				.then(function(result){
-					slot = result;
-				})
-			.click('.tickets-slots__item.high:nth-Child(2)')
-			.click('.tickets-date__close')
-			.getTotalSlot()
-				.then(function(result){
-					result.should.be.equal(slot);
-				})
-			.element('.tickets-dateslot-group .tickets-totals__blank')
-				.then(function(result) {
-						return browser.elementIdText(result.value.ELEMENT);
-					})
-						.then(function(result){
-							result.value.should.be.equal(TicketsPage.txtChooseDate());
-						})
-			.getElementDate('.calendar-item.high:nth-Child(11)')
-				.then(function(result){
-					date = result;
-				})
-			.click('.calendar-item.high:nth-Child(11)')
-			.getTotalDate()
-				.then(function(result){
-					result.should.be.equal(date);
-				})
-			.getTotalSlot()
-				.then(function(result){
-					result.should.be.equal(slot);
+			.elements('.calendar-item.high')
+				.then(function(resultDate){
+					return browser
+						.elementIdClick(resultDate.value[1].ELEMENT)
+						.scroll('.tickets-slots__item.high')
+						.elements('.tickets-slots__item.high')
+							.then(function(result){
+								return browser.getElementSlotByID(result.value[2].ELEMENT)
+										.then(function(result){
+											slot = result;
+										})
+									.elementIdClick(result.value[2].ELEMENT)
+									.click('.tickets-date__close')
+									.getTotalSlot()
+										.then(function(result){
+											result.should.be.equal(slot);
+										})
+									.element('.tickets-dateslot-group .tickets-totals__blank')
+										.then(function(result) {
+												return browser.elementIdText(result.value.ELEMENT);
+											})
+												.then(function(result){
+													result.value.should.be.equal(TicketsPage.txtChooseDate());
+												})
+												//!!!!!!!!!!!!!!!
+									.getElementDateByID(resultDate.value[3].ELEMENT)
+										.then(function(result){
+											date = result;
+										})
+									.elementIdClick(resultDate.value[3].ELEMENT)
+									.getTotalDate()
+										.then(function(result){
+											result.should.be.equal(date);
+										})
+									.getTotalSlot()
+										.then(function(result){
+											result.should.be.equal(slot);
+										});
+							});
 				});
-	})
+	});
 
 	it('should change slot 17-21 to 16-20 when date is changed', function () {
 		// Click on first date containing 17-21 slot
@@ -115,7 +139,7 @@ describe('Check clicking slots', function(){
     				if (!finish){
 	    				return new Promise(function (resolve) {
 	       					browser.elementIdClick(elem.ELEMENT)
-	       						.elements('.tickets-slots__item', function(err, res){
+	       						.elements('.tickets-slots__item.high', function(err, res){
 			          				if ((res.value.length == 8) && (first8)){
 			          					first8 = false;
 			          					browser.elementIdClick(res.value[7].ELEMENT);
@@ -150,26 +174,33 @@ describe('Check clicking slots', function(){
 		//this.skip();
 		var slot;
 		return browser.url('https://kidzania.ru/' + TicketsPage.langLink() + 'tickets')
-			.click('.calendar-item.high:nth-Child(11)')
-			.scroll('.tickets-slots__item.high')
-			.click('.tickets-slots__item.high:nth-Child(4)')
-			.click('.tickets-slot__close')
-			.element('.tickets-dateslot-group .tickets-totals__blank')
-				.then(function(result) {
-						return browser.elementIdText(result.value.ELEMENT);
-					})
-						.then(function(result){
-							result.value.should.be.equal(TicketsPage.txtChooseSlot());
-						})
-			.getElementSlot('.tickets-slots__item.high:nth-Child(3)')
-				.then(function(result){
-					slot = result;
-				})
-			.click('.tickets-slots__item.high:nth-Child(3)')
-			.getTotalSlot()
-				.then(function(result){
-					result.should.be.equal(slot);
+			.elements('.calendar-item.high')
+				.then(function(resultDate){
+					return browser
+						.elementIdClick(resultDate.value[1].ELEMENT)
+						.scroll('.tickets-slots__item.high')
+						.elements('.tickets-slots__item.high')
+							.then(function(result){
+								return browser.elementIdClick(result.value[1].ELEMENT)
+									.click('.tickets-slot__close')
+									.element('.tickets-dateslot-group .tickets-totals__blank')
+										.then(function(result) {
+												return browser.elementIdText(result.value.ELEMENT);
+											})
+												.then(function(result){
+													result.value.should.be.equal(TicketsPage.txtChooseSlot());
+												})
+									.getElementSlotByID(result.value[2].ELEMENT)
+										.then(function(result){
+											slot = result;
+										})
+									.elementIdClick(result.value[2].ELEMENT)
+									.getTotalSlot()
+										.then(function(result){
+											result.should.be.equal(slot);
+										});
+							});
 				});
-	})
+	});
 
 })

@@ -13,29 +13,19 @@ describe('Check clicking dates', function(){
 		// Check futter appeared and date is correct
 		//this.skip();
 		var date;
+		var dateElem;
 		return browser.url('https://kidzania.ru/' + TicketsPage.langLink() + 'tickets')
-			/* TODO:
-			Here I'd like to find all elements witch contain 'high' in 'class' attribute
-			.elements('.calendar-item')
+			.elements('.calendar-item.high')
 				.then(function(result){
-					result.value.forEach(function(elem){
-						return browser.elementIdAttribute(elem.ELEMENT,'class')
-					})					
+					return browser.getElementDateByID(result.value[1].ELEMENT)
 						.then(function(result){
-							console.log('DEBUG:' + result.value);
-							return browser;
+							date = result;
 						})
-				})
-			Although 'high' is mentioned in selector, I still get non-clickable objects as well
-			*/
-			.getElementDate('.calendar-item.high:nth-Child(6)')
-				.then(function(result){
-					date = result;
-				})
-			.click('.calendar-item.high:nth-Child(6)')
-			.getTotalDate()
-				.then(function(result){
-					result.should.be.equal(date);
+					.elementIdClick(result.value[1].ELEMENT)
+					.getTotalDate()
+						.then(function(result){
+							result.should.be.equal(date);
+						});
 				});
 	})
 
@@ -48,19 +38,22 @@ describe('Check clicking dates', function(){
 		var date;
 		return browser
 			.url('https://kidzania.ru/' + TicketsPage.langLink() + 'tickets')
-			.getElementDate('.calendar-item.high:nth-Child(6)')
+			.elements('.calendar-item.high')
 				.then(function(result){
-					date = result;
-				})
-			.click('.calendar-item.high:nth-Child(36)')
-			.getTotalDate()
-			.scroll('.calendar-item.high')
-			.click('.calendar-item.high:nth-Child(6)')
-			.getTotalDate()
-				.then(function(result){
-					result.should.be.equal(date);
+					return browser.getElementDateByID(result.value[2].ELEMENT)
+							.then(function(result){
+								date = result;
+							})
+						.elementIdClick(result.value[5].ELEMENT)
+						.getTotalDate()
+						.scroll('.calendar-item.high')
+						.elementIdClick(result.value[2].ELEMENT)
+						.getTotalDate()
+							.then(function(result){
+								result.should.be.equal(date);
+							});
 				});
-	})
+	});
 
 	it('should change date after closing totals and clicking on a new one', function () {
 		// Click on any date
@@ -72,19 +65,25 @@ describe('Check clicking dates', function(){
 		//this.skip();
 		var date;
 		
-		return browser.url('https://kidzania.ru/' + TicketsPage.langLink() + 'tickets')
-			.getElementDate('.calendar-item.high:nth-Child(5)')
+
+		return browser
+			.url('https://kidzania.ru/' + TicketsPage.langLink() + 'tickets')
+			.elements('.calendar-item.high')
 				.then(function(result){
-					date = result;
-				})
-			.click('.calendar-item.high:nth-Child(6)')
-			.getTotalDate()
-			.click('.tickets-date__close')
-			.waitForExist('.tickets-date__format', 500, true)
-			.click('.calendar-item.high:nth-Child(5)')
-			.getTotalDate()
-				.then(function(result){
-					result.should.be.equal(date);
+					return browser.getElementDateByID(result.value[3].ELEMENT)
+							.then(function(result){
+								date = result;
+							})
+							.elementIdClick(result.value[4].ELEMENT)
+							.getTotalDate()
+							.click('.tickets-date__close')
+							.waitForExist('.tickets-date__format', 500, true)
+							.elementIdClick(result.value[3].ELEMENT)
+							.getTotalDate()
+								.then(function(result){
+									result.should.be.equal(date);
+								});
 				});
+
 	})
 })

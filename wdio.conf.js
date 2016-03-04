@@ -147,6 +147,12 @@ exports.config = {
                                 return TicketsPage.getFormatedDate(result.value);
                             });
         });
+        browser.addCommand("getElementDateByID", function(elem) {
+            return this.elementIdAttribute(elem,'data-date-key')
+                .then(function(result){
+                    return TicketsPage.getFormatedDate(result.value);
+                });
+        });
         browser.addCommand("getElementDateOppositeLang", function(selector) {
             return this.element(selector)
                         .then(function(result) {
@@ -174,6 +180,12 @@ exports.config = {
                             .then(function(result){
                                 return result.value;
                             });
+        });
+        browser.addCommand("getElementSlotByID", function(elem) {
+            return browser.elementIdText(elem)
+                .then(function(result){
+                    return result.value;
+                });      
         });
         //here age is selector of coresponding icon.
         browser.addCommand("clickX", function(age) {

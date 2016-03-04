@@ -17,7 +17,7 @@ module.exports = {
 		}
 		return day + ' ' + this.month[lang][parseInt(date.match(/-(\d\d)-/)[1].replace(/^0/,""))-1];
 	},
-	language: 0, //0 - English, 1 - Russian
+	language: 1, //0 - English, 1 - Russian
 
 	//I'm not proud for this:
 	carriage: '.tickets-action-groups-cell[data-reactid=".0.0.0.2.1.$group-0"] .tickets_group-list_item[data-reactid=".0.0.0.2.1.$group-0.0.1.$1"]',
