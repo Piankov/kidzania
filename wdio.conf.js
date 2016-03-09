@@ -138,29 +138,17 @@ exports.config = {
                                 return result.value;
                             });
         });
-        browser.addCommand("getElementDate", function(selector) {
-            return this.element(selector)
-                        .then(function(result) {
-                            return browser.elementIdAttribute(result.value.ELEMENT,'data-date-key')
-                        })
-                            .then(function(result){
-                                return TicketsPage.getFormatedDate(result.value);
-                            });
-        });
         browser.addCommand("getElementDateByID", function(elem) {
             return this.elementIdAttribute(elem,'data-date-key')
                 .then(function(result){
                     return TicketsPage.getFormatedDate(result.value);
                 });
         });
-        browser.addCommand("getElementDateOppositeLang", function(selector) {
-            return this.element(selector)
-                        .then(function(result) {
-                            return browser.elementIdAttribute(result.value.ELEMENT,'data-date-key')
-                        })
-                            .then(function(result){
-                                return TicketsPage.getFormatedDateByLang(result.value, 1 - TicketsPage.language);
-                            });
+        browser.addCommand("getElementDateOppositeLangByID", function(elem) {
+            return this.elementIdAttribute(elem,'data-date-key')
+                .then(function(result){
+                    return TicketsPage.getFormatedDateByLang(result.value, 1 - TicketsPage.language);
+                });
         });
         browser.addCommand("getTotalSlot", function() {
             return this.waitForExist('.tickets-slot__format')

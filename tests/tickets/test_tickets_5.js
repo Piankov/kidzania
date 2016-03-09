@@ -3,7 +3,7 @@ var should = require('should');
 var Promise = require('bluebird');
 
 describe('Check filled form', function(){
-	this.timeout(15000);
+	this.timeout(25000);
 
 	beforeEach(function(){
     		browser.localStorage('DELETE');
@@ -11,7 +11,6 @@ describe('Check filled form', function(){
 	
 
 	it('should show pay button when everything is correct, and remove when any field is not filled', function () {
-		this.timeout(25000);
 		// Click on any date
 		// Click on any slot
 		// Click on ticket card 2-3 years
@@ -25,33 +24,39 @@ describe('Check filled form', function(){
 		
 		//this.skip();
 		return browser.url('https://kidzania.ru/' + TicketsPage.langLink() + 'tickets')
-			.click('.calendar-item.high:nth-Child(6)')
-			.scroll('.tickets-slots__item.high')			
-			.click('.tickets-slots__item.high:nth-Child(1)')
-			.scroll('.ticket_card_button')
-			.click(TicketsPage.carriage + ' .ticket_card_button')
-			.waitForVisible('.tickets-adult-hint')
-			.click('.tickets-adult-hint__close')
-			.setValue('.tickets-details__input', 'AAA')
-			.isPayEnanbled(false)
-			.setValue('.tickets-details__input', 'AAA@AAA.AA')
-			.isPayEnanbled(true)
-			.click('.tickets-date__close')
-			.isPayEnanbled(false)
-			.scroll('.calendar-item.high:nth-Child(6)')
-			.click('.calendar-item.high:nth-Child(6)')
-			.isPayEnanbled(true)
-			.click('.tickets-slot__close')
-			.isPayEnanbled(false)
-			.scroll('.tickets-slots__item.high:nth-Child(1)')	
-			.click('.tickets-slots__item.high:nth-Child(1)')
-			.isPayEnanbled(true)
-			.clickX('.icon-adult')
-			.clickX('.icon-child-carriage')
-			.isPayEnanbled(false)
-			.scroll('.ticket_card_button')
-			.click(TicketsPage.carriage + ' .ticket_card_button')
-			.isPayEnanbled(true)
+			.elements('.calendar-item.high')
+				.then(function(resultData){
+					return browser.elementIdClick(resultData.value[1].ELEMENT)
+						.scroll('.tickets-slots__item.high')
+						.elements('.tickets-slots__item.high')
+							.then(function(result){
+								return browser.elementIdClick(result.value[1].ELEMENT)
+									.scroll('.ticket_card_button')
+									.click(TicketsPage.carriage + ' .ticket_card_button')
+									.waitForVisible('.tickets-adult-hint')
+									.click('.tickets-adult-hint__close')
+									.setValue('.tickets-details__input', 'AAA')
+									.isPayEnanbled(false)
+									.setValue('.tickets-details__input', 'AAA@AAA.AA')
+									.isPayEnanbled(true)
+									.click('.tickets-date__close')
+									.isPayEnanbled(false)
+									.scroll('.calendar-item')
+									.elementIdClick(resultData.value[1].ELEMENT)
+									.isPayEnanbled(true)
+									.click('.tickets-slot__close')
+									.isPayEnanbled(false)
+									.scroll('.tickets-slots__item')	
+									.elementIdClick(result.value[1].ELEMENT)
+									.isPayEnanbled(true)
+									.clickX('.icon-adult')
+									.clickX('.icon-child-carriage')
+									.isPayEnanbled(false)
+									.scroll('.ticket_card_button')
+									.click(TicketsPage.carriage + ' .ticket_card_button')
+									.isPayEnanbled(true)
+							});
+				});
 	});
 
 	it('should save all data in totals after changing language', function () {
@@ -65,58 +70,62 @@ describe('Check filled form', function(){
 		// Check all data
 		
 		//this.skip();
+		this.timeout(40000);
 		var date;
 		var slot;
 		return browser.url('https://kidzania.ru/' + TicketsPage.langLink() + 'tickets')
-			.click('.calendar-item.high:nth-Child(6)')
-			.getElementDateOppositeLang('.calendar-item.high:nth-Child(6)')
+			.elements('.calendar-item.high')
 				.then(function(result){
-					date = result;
-				})
-
-			.scroll('.tickets-slots__item.high')			
-			.click('.tickets-slots__item.high:nth-Child(1)')
-			.getElementSlot('.tickets-slots__item.high:nth-Child(1)')
-				.then(function(result){
-					slot = result;
-				})
-			.scroll('.ticket_card_button')
-			.click(TicketsPage.carriage + ' .ticket_card_button')
-			.click(TicketsPage.carriage + ' .ticket_card_button')
-			.click(TicketsPage.carriage + ' .ticket_card_button')
-			.click(TicketsPage.teen + ' .ticket_card_button')
-			.click(TicketsPage.teen + ' .ticket_card_button')
-			.click(TicketsPage.teen + ' .ticket_card_button')
-			.click(TicketsPage.teen + ' .ticket_card_button')
-			.scroll(TicketsPage.adult)
-			.click(TicketsPage.adult + ' .ticket_card_button')
-			.click(TicketsPage.adult + ' .ticket_card_button')
-			.click(TicketsPage.adult + ' .ticket_card_button')
-			.click(TicketsPage.adult + ' .ticket_card_button')
-			.setValue('.tickets-details__input', 'AAA@AAA.AA')
-			.scroll('.header__lang')
-			.click('.header__lang')
-			.waitForVisible(TicketsPage.changeLang(), 3000)
-			.click(TicketsPage.changeLang())
-				.then(function(result){
-					TicketsPage.language = 1 - TicketsPage.language;
-				})
-			.getTotalDate()
-				.then(function(result){
-					result.should.be.equal(date);
-				})
-			.getTotalSlot()
-				.then(function(result){
-					result.should.be.equal(slot);
-				})
-			.getTicketsNumbers()
-				.then(function(result){
-					result.should.be.eql([3, 4, 5]);
-				})
-			.getValue('.tickets-details__input')
-				.then(function(result){
-					result.should.be.eql('AAA@AAA.AA');
-				})			
+					return browser
+						.getElementDateOppositeLangByID(result.value[1].ELEMENT)
+							.then(function(result){
+								date = result;
+							})
+						.elementIdClick(result.value[1].ELEMENT)
+						.scroll('.tickets-slots__item.high')
+						.elements('.tickets-slots__item.high')
+							.then(function(result){
+								return browser.getElementSlotByID(result.value[1].ELEMENT)
+										.then(function(result){
+											slot = result;
+										})
+									.elementIdClick(result.value[1].ELEMENT)
+									.scroll('.ticket_card_button')
+									.click(TicketsPage.carriage + ' .ticket_card_button')
+									.click(TicketsPage.carriage + ' .ticket_card_button')
+									.click(TicketsPage.carriage + ' .ticket_card_button')
+									.click(TicketsPage.teen + ' .ticket_card_button')
+									.click(TicketsPage.teen + ' .ticket_card_button')
+									.click(TicketsPage.teen + ' .ticket_card_button')
+									.click(TicketsPage.teen + ' .ticket_card_button')
+									.scroll(TicketsPage.adult)
+									.click(TicketsPage.adult + ' .ticket_card_button')
+									.click(TicketsPage.adult + ' .ticket_card_button')
+									.click(TicketsPage.adult + ' .ticket_card_button')
+									.click(TicketsPage.adult + ' .ticket_card_button')
+									.setValue('.tickets-details__input', 'AAA@AAA.AA')
+									.scroll('.header__lang')
+									.click('.header__lang')
+									.waitForVisible(TicketsPage.changeLang(), 3000)
+									.click(TicketsPage.changeLang())
+									.getTotalDate()
+										.then(function(result){
+											result.should.be.equal(date);
+										})
+									.getTotalSlot()
+										.then(function(result){
+											result.should.be.equal(slot);
+										})
+									.getTicketsNumbers()
+										.then(function(result){
+											result.should.be.eql([3, 4, 5]);
+										})
+									.getValue('.tickets-details__input')
+										.then(function(result){
+											result.should.be.eql('AAA@AAA.AA');
+										})
+							});
+				});
 	});
 
 	it('should count summ correctly', function () {
@@ -134,37 +143,48 @@ describe('Check filled form', function(){
 
 		//this.skip();
 		return browser.url('https://kidzania.ru/' + TicketsPage.langLink() + 'tickets')
-			//TODO: Here should be bussines day
-			.click('.calendar-item.high:nth-Child(8)')
-			.scroll('.tickets-slots__item.high')			
-			.click('.tickets-slots__item.high:nth-Child(1)')
-			.scroll('.ticket_card_button')
-			.click(TicketsPage.carriage + ' .ticket_card_button')
-			.click(TicketsPage.carriage + ' .ticket_card_button')
-			.click(TicketsPage.teen + ' .ticket_card_button')
-			.click(TicketsPage.teen + ' .ticket_card_button')
-			.waitForVisible('.tickets-adult-hint')
-			.click('.tickets-adult-hint__close')
-			.getText('.tickets-pay__amount ')
-				.then(function(result){
-					var str = result.match(/ (\d*) /)[1];
-					var counted = TicketsPage.price.carriage[0]*2+TicketsPage.price.teen[0]*2 + TicketsPage.price.adult[0];
-					str.should.be.eql(counted);
-				})
-			.click('.calendar-item.holyday.high:nth-Child(10)')
-			.getText('.tickets-pay__amount ')
-				.then(function(result){
-					var str = result.match(/ (\d*) /)[1];
-					var counted = TicketsPage.price.carriage[1]*2+TicketsPage.price.teen[1]*2 + TicketsPage.price.adult[1];
-					str.should.be.eql(counted);
-				})
-			.clickX('.icon-adult')
-			.getText('.tickets-pay__amount ')
-				.then(function(result){
-					var str = result.match(/ (\d*) /)[1];
-					var counted = TicketsPage.price.carriage[1]*2+TicketsPage.price.teen[1]*2;
-					str.should.be.eql(counted);
-				})
+			.elements('.calendar-item.high:not(holyday)')
+				.then(function(resultDate){
+					return browser
+						.elementIdClick(resultDate.value[1].ELEMENT)
+						.scroll('.tickets-slots__item.high')
+						.elements('.tickets-slots__item.high')
+							.then(function(result){
+								return browser.elementIdClick(result.value[1].ELEMENT)
+									.scroll('.ticket_card_button')
+									.click(TicketsPage.carriage + ' .ticket_card_button')
+									.click(TicketsPage.carriage + ' .ticket_card_button')
+									.click(TicketsPage.teen + ' .ticket_card_button')
+									.click(TicketsPage.teen + ' .ticket_card_button')
+									.waitForVisible('.tickets-adult-hint')
+									.click('.tickets-adult-hint__close')
+									.getText('.tickets-pay__amount ')
+										.then(function(result){
+											var str = result.match(/ (\d*) /)[1];
+											var counted = TicketsPage.price.carriage[0]*2+TicketsPage.price.teen[0]*2 + TicketsPage.price.adult[0];
+											str.should.be.eql(counted);
+										})
+									.elements('.calendar-item.high.holyday')
+										.then(function(resultDate){
+											return browser
+												.elementIdClick(resultDate.value[1].ELEMENT)
+
+											
+												.getText('.tickets-pay__amount ')
+													.then(function(result){
+														var str = result.match(/ (\d*) /)[1];
+														var counted = TicketsPage.price.carriage[1]*2+TicketsPage.price.teen[1]*2 + TicketsPage.price.adult[1];
+														str.should.be.eql(counted);
+													})
+												.clickX('.icon-adult')
+												.getText('.tickets-pay__amount ')
+													.then(function(result){
+														var str = result.match(/ (\d*) /)[1];
+														var counted = TicketsPage.price.carriage[1]*2+TicketsPage.price.teen[1]*2;
+														str.should.be.eql(counted);
+													})
+										});
+							});
+				});
 	});
-	
 })

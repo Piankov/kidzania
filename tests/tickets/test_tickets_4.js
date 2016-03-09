@@ -3,13 +3,12 @@ var should = require('should');
 var Promise = require('bluebird');
 
 describe('Check chosing tickets', function(){
-	this.timeout(15000);	
+	this.timeout(25000);	
 
 	beforeEach(function(){
     		browser.localStorage('DELETE');
     });
 	
-
 	it('should appear totals', function () {
 		// Click on any date
 		// Click on any slot
@@ -22,37 +21,40 @@ describe('Check chosing tickets', function(){
 		var date;
 		var slot;
 		return browser.url('https://kidzania.ru/' + TicketsPage.langLink() + 'tickets')
-			.getElementDate('.calendar-item.high:nth-Child(6)')
+			.elements('.calendar-item.high')
 				.then(function(result){
-					date = result;
-				})
-			.click('.calendar-item.high:nth-Child(6)')
-			.scroll('.tickets-slots__item.high')			
-			.click('.tickets-slots__item.high:nth-Child(1)')
-			.scroll('.ticket_card_button')
-			.click(TicketsPage.carriage + ' .ticket_card_button')
-			.waitForVisible('.tickets-adult-hint')
-			.click('.tickets-adult-hint__close')
-			.getTotalDate()
-				.then(function(result){
-					result.should.be.equal(date);
-				})
-			.getElementSlot('.tickets-slots__item.high:nth-Child(1)')
-				.then(function(result){
-					slot = result;
-				})
-			.getTotalSlot()
-				.then(function(result){
-					result.should.be.equal(slot);
-				})
-			.getTotalDate()
-				.then(function(result){
-					result.should.be.equal(date)
-				})
-			.waitForExist('.icon-child-carriage')
-			.waitForExist('.tickets-product__icon')
-			.waitForExist('.tickets-product__quantity', 500, true)
-	})
+					return browser
+						.getElementDateByID(result.value[1].ELEMENT)
+							.then(function(result){
+								date = result;
+							})
+						.elementIdClick(result.value[1].ELEMENT)
+						.scroll('.tickets-slots__item.high')
+						.elements('.tickets-slots__item.high')
+							.then(function(result){
+								return browser.getElementSlotByID(result.value[1].ELEMENT)
+										.then(function(result){
+											slot = result;
+										})
+									.elementIdClick(result.value[1].ELEMENT)
+									.scroll('.ticket_card_button')
+									.click(TicketsPage.carriage + ' .ticket_card_button')
+									.waitForVisible('.tickets-adult-hint')
+									.click('.tickets-adult-hint__close')
+									.getTotalDate()
+										.then(function(result){
+											result.should.be.equal(date);
+										})
+									.getTotalSlot()
+										.then(function(result){
+											result.should.be.equal(slot);
+										})
+									.waitForExist('.icon-child-carriage')
+									.waitForExist('.tickets-product__icon')
+									.waitForExist('.tickets-product__quantity', 500, true)
+						});
+				});
+	});
 
 	it('should add and remove correctly', function () {
 		// Click on any date
@@ -76,64 +78,70 @@ describe('Check chosing tickets', function(){
 		// Check carriage disappered from totals
 
 		//this.skip();
-		this.timeout(60000);
-		var date;
-		var slot;
+		this.timeout(160000);
 		return browser.url('https://kidzania.ru/' + TicketsPage.langLink() + 'tickets')
-			.click('.calendar-item.high:nth-Child(6)')
-			.scroll('.tickets-slots__item.high')			
-			.click('.tickets-slots__item.high:nth-Child(1)')
-			.scroll('.ticket_card_button')
-			.click(TicketsPage.carriage + ' .ticket_card_button')
-			.click(TicketsPage.teen + ' .ticket_card_button')
-			.waitForVisible('.tickets-adult-hint')
-			.click('.tickets-adult-hint__close')
-			.getTicketsNumbers()
+			.elements('.calendar-item.high')
 				.then(function(result){
-					result.should.be.eql([1, 1, 1]);
-				})			
-			.click(TicketsPage.teen + ' .ticket_card_button')
-			.click(TicketsPage.teen + ' .ticket_card_button')
-			.getTicketsNumbers()
-				.then(function(result){
-					result.should.be.eql([1, 3, 1]);
-				})
-			.click(TicketsPage.carriage + ' .ticket_card_button')
-			.click(TicketsPage.carriage + ' .ticket_card_button')
-			.click(TicketsPage.carriage + ' .ticket_card_button')
-			.click(TicketsPage.carriage + ' .ticket_card_button')
-			.getTicketsNumbers()
-				.then(function(result){
-					result.should.be.eql([5, 3, 1]);
-				})
-			.scroll(TicketsPage.adult + ' .ticket_card_button')
-			.click(TicketsPage.adult + ' .ticket_card_button')
-			.click(TicketsPage.adult + ' .ticket_card_button')
-			.click(TicketsPage.adult + ' .ticket_card_button')
-			.getTicketsNumbers()
-				.then(function(result){
-					result.should.be.eql([5, 3, 4]);
-				})
-			.click(TicketsPage.adult + ' .ticket_card_button--simple')
-			.click(TicketsPage.adult + ' .ticket_card_button--simple')
-			.click(TicketsPage.adult + ' .ticket_card_button--simple')
-			.getTicketsNumbers()
-				.then(function(result){
-					result.should.be.eql([5, 3, 1]);
-				})
-			.click(TicketsPage.teen + ' .ticket_card_button--simple')
-			.click(TicketsPage.teen + ' .ticket_card_button--simple')
-			.click(TicketsPage.teen + ' .ticket_card_button--simple')
-			.getTicketsNumbers()
-				.then(function(result){
-					result.should.be.eql([5, 0, 1]);
-				})
-			.clickX('.icon-child-carriage')
-	       	.getTicketsNumbers()
-				.then(function(result){
-					result.should.be.eql([0, 0, 1]);
-				});			
-	});
+					return browser
+						.elementIdClick(result.value[1].ELEMENT)
+						.scroll('.tickets-slots__item.high')
+						.elements('.tickets-slots__item.high')
+							.then(function(result){
+								return browser.elementIdClick(result.value[1].ELEMENT)
+									.scroll('.ticket_card_button')
+									.click(TicketsPage.carriage + ' .ticket_card_button')
+									.click(TicketsPage.teen + ' .ticket_card_button')
+									.waitForVisible('.tickets-adult-hint')
+									.click('.tickets-adult-hint__close')
+									.getTicketsNumbers()
+										.then(function(result){
+											result.should.be.eql([1, 1, 1]);
+										})			
+									.click(TicketsPage.teen + ' .ticket_card_button')
+									.click(TicketsPage.teen + ' .ticket_card_button')
+									.getTicketsNumbers()
+										.then(function(result){
+											result.should.be.eql([1, 3, 1]);
+										})
+									.click(TicketsPage.carriage + ' .ticket_card_button')
+									.click(TicketsPage.carriage + ' .ticket_card_button')
+									.click(TicketsPage.carriage + ' .ticket_card_button')
+									.click(TicketsPage.carriage + ' .ticket_card_button')
+									.getTicketsNumbers()
+										.then(function(result){
+											result.should.be.eql([5, 3, 1]);
+										})
+									.scroll(TicketsPage.adult + ' .ticket_card_button')
+									.click(TicketsPage.adult + ' .ticket_card_button')
+									.click(TicketsPage.adult + ' .ticket_card_button')
+									.click(TicketsPage.adult + ' .ticket_card_button')
+									.getTicketsNumbers()
+										.then(function(result){
+											result.should.be.eql([5, 3, 4]);
+										})
+									.click(TicketsPage.adult + ' .ticket_card_button--simple')
+									.click(TicketsPage.adult + ' .ticket_card_button--simple')
+									.click(TicketsPage.adult + ' .ticket_card_button--simple')
+									.getTicketsNumbers()
+										.then(function(result){
+											result.should.be.eql([5, 3, 1]);
+										})
+									.click(TicketsPage.teen + ' .ticket_card_button--simple')
+									.click(TicketsPage.teen + ' .ticket_card_button--simple')
+									.click(TicketsPage.teen + ' .ticket_card_button--simple')
+									.getTicketsNumbers()
+										.then(function(result){
+											result.should.be.eql([5, 0, 1]);
+										})
+									.clickX('.icon-child-carriage')
+							       	.getTicketsNumbers()
+										.then(function(result){
+											result.should.be.eql([0, 0, 1]);
+										});	
+							});
+				});
+	});		
+
 
 	it('should remove adult correctly', function () {
 		// Click on any date
@@ -148,33 +156,39 @@ describe('Check chosing tickets', function(){
 		// Check ВЫберите тип и количество билетов appeared
 
 		//this.skip();
-
 		return browser.url('https://kidzania.ru/' + TicketsPage.langLink() + 'tickets')
-			.click('.calendar-item.high:nth-Child(6)')
-			.scroll('.tickets-slots__item.high')			
-			.click('.tickets-slots__item.high:nth-Child(1)')
-			.scroll('.ticket_card_button')
-			.click(TicketsPage.teen + ' .ticket_card_button')
-			.waitForVisible('.tickets-adult-hint')
-			.click('.tickets-adult-hint__close')
-			.getTicketsNumbers()
+			.elements('.calendar-item.high')
 				.then(function(result){
-					result.should.be.eql([0, 1, 1]);
-				})
-			.clickX('.icon-adult')
-			.getText('.tickets-totals__blank')
-				.then(function(result){
-					result.should.be.eql(TicketsPage.txtTotalsAdultMessage());
-				})
-			.getTicketsNumbers()
-				.then(function(result){
-					result.should.be.eql([0, 1, 0]);
-				})
-			.clickX('.icon-child-teen')
-			.getText('.tickets-totals__blank')
-				.then(function(result){
-					result.should.be.eql(TicketsPage.txtChooseTicket());
-				})
+					return browser
+						.elementIdClick(result.value[1].ELEMENT)
+						.scroll('.tickets-slots__item.high')
+						.elements('.tickets-slots__item.high')
+							.then(function(result){
+								return browser.elementIdClick(result.value[1].ELEMENT)
+									.scroll('.ticket_card_button')
+									.click(TicketsPage.teen + ' .ticket_card_button')
+									.waitForVisible('.tickets-adult-hint')
+									.click('.tickets-adult-hint__close')
+									.getTicketsNumbers()
+										.then(function(result){
+											result.should.be.eql([0, 1, 1]);
+										})
+									.clickX('.icon-adult')
+									.getText('.tickets-totals__blank')
+										.then(function(result){
+											result.should.be.eql(TicketsPage.txtTotalsAdultMessage());
+										})
+									.getTicketsNumbers()
+										.then(function(result){
+											result.should.be.eql([0, 1, 0]);
+										})
+									.clickX('.icon-child-teen')
+									.getText('.tickets-totals__blank')
+										.then(function(result){
+											result.should.be.eql(TicketsPage.txtChooseTicket());
+										})
+							});
+				});
 	});
 
 	it('should process removing date correctly', function () {
@@ -191,29 +205,38 @@ describe('Check chosing tickets', function(){
 
 		//this.skip();
 		return browser.url('https://kidzania.ru/' + TicketsPage.langLink() + 'tickets')
-			.click('.calendar-item.holyday.high:nth-Child(5)')
-			.scroll('.tickets-slots__item.high')			
-			.click('.tickets-slots__item.high:nth-Child(1)')
-			.scroll('.ticket_card_button')
-			.click(TicketsPage.teen + ' .ticket_card_button')
-			.waitForVisible('.tickets-adult-hint')
-			.click('.tickets-adult-hint__close')
-			.clickX('.icon-adult')
-			.click('.tickets-date__close')
-			.click('.tickets-slot__close')
-			.getText('.tickets-product__name')
+			.elements('.calendar-item.holyday.high')
 				.then(function(result){
-					var str = result.match(/^(\d*)\D/)[1];
-					str.should.be.eql(TicketsPage.price.teen[1]);
-				})
-			//TODO here should be not holyday
-			.click('.calendar-item.high:nth-Child(2)')
-			.getText('.tickets-product__name')
-				.then(function(result){
-					var str = result.match(/^(\d*)\D/)[1];
-					str.should.be.eql(TicketsPage.price.teen[0]);
-				})
-	});
+					return browser
+						.elementIdClick(result.value[1].ELEMENT)
+						.scroll('.tickets-slots__item.high')
+						.elements('.tickets-slots__item.high')
+							.then(function(result){
+								return browser.elementIdClick(result.value[1].ELEMENT)
+									.scroll('.ticket_card_button')
+									.click(TicketsPage.teen + ' .ticket_card_button')
+									.waitForVisible('.tickets-adult-hint')
+									.click('.tickets-adult-hint__close')
+									.clickX('.icon-adult')
+									.click('.tickets-date__close')
+									.click('.tickets-slot__close')
+									.getText('.tickets-product__name')
+										.then(function(result){
+											var str = result.match(/^(\d*)\D/)[1];
+											str.should.be.eql(TicketsPage.price.teen[1]);
+										})
+									.elements('.calendar-item.high:not(holyday)')
+										.then(function(result){
+											return browser.elementIdClick(result.value[1].ELEMENT)
+												.getText('.tickets-product__name')
+												.then(function(result){
+													var str = result.match(/^(\d*)\D/)[1];
+													str.should.be.eql(TicketsPage.price.teen[0]);
+												})
+										});
+							});
+				});
+	});		
 
 	it('should process changing date correctly', function () {
 		// Click on any date
@@ -228,25 +251,34 @@ describe('Check chosing tickets', function(){
 
 		//this.skip();
 		return browser.url('https://kidzania.ru/' + TicketsPage.langLink() + 'tickets')
-			.click('.calendar-item.holyday.high:nth-Child(5)')
-			.scroll('.tickets-slots__item.high')			
-			.click('.tickets-slots__item.high:nth-Child(1)')
-			.scroll('.ticket_card_button')
-			.click(TicketsPage.carriage + ' .ticket_card_button')
-			.waitForVisible('.tickets-adult-hint')
-			.click('.tickets-adult-hint__close')
-			.clickX('.icon-adult')
-			.getText('.tickets-product__name')
+			.elements('.calendar-item.holyday.high')
 				.then(function(result){
-					var str = result.match(/^(\d*)\D/)[1];
-					str.should.be.eql(TicketsPage.price.carriage[1]);
-				})
-			//TODO here should be not holyday
-			.click('.calendar-item.high:nth-Child(2)')
-			.getText('.tickets-product__name')
-				.then(function(result){
-					var str = result.match(/^(\d*)\D/)[1];
-					str.should.be.eql(TicketsPage.price.carriage[0]);
-				})
+					return browser
+						.elementIdClick(result.value[1].ELEMENT)
+						.scroll('.tickets-slots__item.high')
+						.elements('.tickets-slots__item.high')
+							.then(function(result){
+								return browser.elementIdClick(result.value[1].ELEMENT)
+									.scroll('.ticket_card_button')
+									.click(TicketsPage.teen + ' .ticket_card_button')
+									.waitForVisible('.tickets-adult-hint')
+									.click('.tickets-adult-hint__close')
+									.clickX('.icon-adult')
+									.getText('.tickets-product__name')
+										.then(function(result){
+											var str = result.match(/^(\d*)\D/)[1];
+											str.should.be.eql(TicketsPage.price.teen[1]);
+										})
+									.elements('.calendar-item.high:not(holyday)')
+										.then(function(result){
+											return browser.elementIdClick(result.value[1].ELEMENT)
+												.getText('.tickets-product__name')
+												.then(function(result){
+													var str = result.match(/^(\d*)\D/)[1];
+													str.should.be.eql(TicketsPage.price.teen[0]);
+												})
+										});
+							});
+				});
 	});
 })
