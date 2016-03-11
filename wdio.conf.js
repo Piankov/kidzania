@@ -12,6 +12,8 @@ exports.config = {
     // NPM script (see https://docs.npmjs.com/cli/run-script) then the current working
     // directory is where your package.json resides, so `wdio` will be called from there.
     //
+    host: 'localhost',
+    port: 4444,
     specs: [
         './tests/tickets/*.js'
     ],
